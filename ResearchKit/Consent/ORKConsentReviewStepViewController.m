@@ -392,7 +392,7 @@ static NSString *const _SignatureStepIdentifier = @"signatureStep";
             //register ScrollView to update hairline
             if ([viewController isKindOfClass:[ORKConsentReviewController class]]) {
                 ORKConsentReviewController *reviewViewController =  (ORKConsentReviewController *)viewController;
-                [strongSelf.taskViewController setRegisteredScrollView:reviewViewController.webView.scrollView];
+//                [strongSelf.taskViewController setRegisteredScrollView:reviewViewController.webView.scrollView];
             }
             
             UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, nil);

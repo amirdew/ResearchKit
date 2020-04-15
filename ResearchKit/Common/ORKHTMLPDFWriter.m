@@ -47,13 +47,13 @@ static const CGFloat LetterHeight = 11.0f;
 
 
 
-@interface ORKHTMLPDFWriter () <UIWebViewDelegate> {
+@interface ORKHTMLPDFWriter () {
     id _selfRetain;
 }
 
 @property (nonatomic) CGSize pageSize;
 @property (nonatomic) UIEdgeInsets pageMargins;
-@property (nonatomic, strong) UIWebView *webView;
+//@property (nonatomic, strong) UIWebView *webView;
 @property (nonatomic, strong) NSData *data;
 @property (nonatomic, copy) NSError *error;
 @property (nonatomic, copy) void (^completionBlock)(NSData *data, NSError *error);
@@ -75,9 +75,9 @@ static const CGFloat PageEdge = 72.0 / 4;
     _data = nil;
     _error = nil;
     
-    self.webView = [[UIWebView alloc] init];
-    self.webView.delegate = self;
-    [self.webView loadHTMLString:html baseURL:ORKCreateRandomBaseURL()];
+   // self.webView = [[UIWebView alloc] init];
+    // self.webView.delegate = self;
+    //[self.webView loadHTMLString:html baseURL:ORKCreateRandomBaseURL()];
     
     _selfRetain = self;
     self.completionBlock = completionBlock;
@@ -90,11 +90,11 @@ static const CGFloat PageEdge = 72.0 / 4;
 }
 
 - (void)savePDF {
-    if (!self.webView) {
-        return;
-    }
-    
-    UIPrintFormatter *formatter = self.webView.viewPrintFormatter;
+//    if (!self.webView) {
+//        return;
+//    }
+//
+//    UIPrintFormatter *formatter = self.webView.viewPrintFormatter;
     
     ORKHTMLPDFPageRenderer *renderer = self.printRenderer;
     if (renderer == nil) {
@@ -105,7 +105,7 @@ static const CGFloat PageEdge = 72.0 / 4;
         
     }
     
-    [renderer addPrintFormatter:formatter startingAtPageAtIndex:0];
+    //[renderer addPrintFormatter:formatter startingAtPageAtIndex:0];
     
     NSMutableData *currentReportData = [NSMutableData data];
     
@@ -127,7 +127,7 @@ static const CGFloat PageEdge = 72.0 / 4;
     
     _data = currentReportData;
     
-    self.webView = nil;
+    //self.webView = nil;
     
     self.completionBlock(_data, nil);
     _selfRetain = nil;
@@ -143,27 +143,27 @@ static const CGFloat PageEdge = 72.0 / 4;
 
 #pragma mark - UIWebViewDelegate
 
-- (void)webViewDidFinishLoad:(UIWebView *)webView {
-    NSString *readyState = [webView stringByEvaluatingJavaScriptFromString:@"document.readyState"];
-    BOOL complete = [readyState isEqualToString:@"complete"];
-    
-    [[self class] cancelPreviousPerformRequestsWithTarget:self selector:@selector(timeout) object:nil];
-    
-    if (complete) {
-        [self savePDF];
-    } else {
-        [self performSelector:@selector(timeout) withObject:nil afterDelay:1.0f];
-    }
-}
-
-- (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error {
-    [[self class] cancelPreviousPerformRequestsWithTarget:self selector:@selector(timeout) object:nil];
-    
-    _error = error;
-    self.webView = nil;
-    
-    self.completionBlock(nil, error);
-    _selfRetain = nil;
-}
+//- (void)webViewDidFinishLoad:(UIWebView *)webView {
+//    NSString *readyState = [webView stringByEvaluatingJavaScriptFromString:@"document.readyState"];
+//    BOOL complete = [readyState isEqualToString:@"complete"];
+//    
+//    [[self class] cancelPreviousPerformRequestsWithTarget:self selector:@selector(timeout) object:nil];
+//    
+//    if (complete) {
+//        [self savePDF];
+//    } else {
+//        [self performSelector:@selector(timeout) withObject:nil afterDelay:1.0f];
+//    }
+//}
+//
+//- (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error {
+//    [[self class] cancelPreviousPerformRequestsWithTarget:self selector:@selector(timeout) object:nil];
+//    
+//    _error = error;
+//    self.webView = nil;
+//    
+//    self.completionBlock(nil, error);
+//    _selfRetain = nil;
+//}
 
 @end
